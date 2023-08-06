@@ -1,0 +1,18 @@
+//* .sequelizerc
+//* env: The environment to run the command in
+//* config: The path to the config file
+//* options-path: The path to a JSON file with additional options
+//* migrations-path: The path to the migrations folder
+//* seeders-path: The path to the seeders folder
+//* models-path: The path to the models folder
+//* url: The database connection string to use. Alternative to using --config files
+//* debug: When available show various debug information
+
+const path = require('path');
+
+module.exports = {
+  'config': path.resolve('./src/config', 'config.js'),
+  'migrations-path': path.resolve('./src', 'migrations'),
+  'models-path': path.resolve('./src', 'models'),
+  'seeders-path': path.resolve('./src', 'seeders')
+}
