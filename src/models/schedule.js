@@ -12,6 +12,14 @@ module.exports = (sequelize, DataTypes) => {
       Schedule.belongsTo(models.Allcode, { foreignKey: 'timeType', targetKey: 'keyMap', as: 'timeTypeData' })
       Schedule.belongsTo(models.User,{foreignKey:'doctorId',targetKey: 'id',as:'doctorData'})
     }
+    static async customFindAll(id, date) {
+      try {
+        const [results] = await sequelize.query(`SELECT "timeType", "date", "doctorId", "maxNumber" FROM "Schedules" AS "Schedule" WHERE "Schedule"."doctorId" = ${id} AND "Schedule"."date" = '${date}'`);
+        return results;
+      } catch (error) {
+        throw error;
+      }
+    }
   }
   Schedule.init(
     {

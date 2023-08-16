@@ -250,14 +250,10 @@ let bulkCreateSchedule = (data) => {
             return item;
           });
         }
-
+        console.log("data bulk schedule: ", data);
         //get all existing data
-        let existing = await db.Schedule.findAll({
-          where: { doctorId: data.doctorId, date: data.formattedDate },
-          attributes: ["timeType", "date", "doctorId", "maxNumber"],
-          raw: true,
-        });
-
+        let existing = await db.Schedule.customFindAll(data.doctorId,data.formattedDate);
+        console.log('existing data: ', existing);
         // //convert date to timestamp
         // if (existing && existing.length > 0) {
         //   existing = existing.map((item) => {
@@ -270,11 +266,12 @@ let bulkCreateSchedule = (data) => {
         let toCreate = _.differenceWith(schedule, existing, (a, b) => {
           return a.timeType === b.timeType && +a.date === +b.date;
         });
-
+        console.log("bulk create: ", toCreate);
         //create data
         if (toCreate && toCreate.length > 0) {
           await db.Schedule.bulkCreate(toCreate);
         }
+        //await db.Schedule.bulkCreate(data.arrSchedule);
         resolve({
           errCode: 0,
           errMessage: "OK",
