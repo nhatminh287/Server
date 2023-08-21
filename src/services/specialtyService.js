@@ -29,6 +29,31 @@ let createSpecialty = (data) => {
     }
   });
 };
+let editHairstyle = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (
+        !data.name ||
+        !data.imageBase64 ||
+        !data.descriptionHTML ||
+        !data.descriptionMarkdown
+      ) {
+        resolve({
+          errCode: 1,
+          errMessage: "missing parameter",
+        });
+      } else {
+        await db.Specialty.editSpecialty(data.id, data.name, data.descriptionHTML, data.descriptionMarkdown, data.imageBase64);
+        resolve({
+          errCode: 0,
+          errMessage: "ok",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 let getAllSpecialty = () => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -100,4 +125,5 @@ module.exports = {
   createSpecialty: createSpecialty,
   getAllSpecialty: getAllSpecialty,
   getDetailSpecialtyById: getDetailSpecialtyById,
+  editHairstyle: editHairstyle,
 };

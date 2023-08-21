@@ -1,12 +1,11 @@
 import db from "../models/index";
 let getAllHandbook = () => {
     return new Promise(async (resolve, reject) => {
-      try {
-        console.log(db.Handbook);
+      try {        
         let data = await db.Handbook.customFindAll();
         if (data && data.length > 0) {
           data.map((item) => {
-            console.log('Đây là handbook', item);
+            
             return item;
           });
         }

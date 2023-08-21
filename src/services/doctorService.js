@@ -217,9 +217,17 @@ let getDetailDoctorById = (inputId) => {
           raw: false,
           nest: true,
         });
+        
         if (data && data.image) {
-          data.image = new Buffer(data.image, "base64").toString("binary");
+          if (data.image.startsWith("http://") || data.image.startsWith("https://")) {
+            // Nếu data.image là đường dẫn HTTP, không cần xử lý mã hóa
+          } else {
+            // Nếu data.image là chuỗi base64, thực hiện việc giải mã
+            const imageBuffer = Buffer.from(data.image, "base64");
+            data.image = imageBuffer.toString("binary");
+          }
         }
+        
         if (!data) {
           data = {};
         }
@@ -419,8 +427,15 @@ let getProfileDoctorById = (inputId) => {
           raw: false,
           nest: true,
         });
+        
         if (data && data.image) {
-          data.image = new Buffer(data.image, "base64").toString("binary");
+          if (data.image.startsWith("http://") || data.image.startsWith("https://")) {
+            // Nếu data.image là đường dẫn HTTP, không cần xử lý mã hóa
+          } else {
+            // Nếu data.image là chuỗi base64, thực hiện việc giải mã
+            const imageBuffer = Buffer.from(data.image, "base64");
+            data.image = imageBuffer.toString("binary");
+          }
         }
         if (!data) {
           data = {};

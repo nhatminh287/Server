@@ -10,6 +10,16 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
+    static async editSpecialty(id, name, html, markdown, image){
+      try {
+        const [results] = await sequelize.query(`UPDATE "Specialties" 
+        SET name = '${name}', "descriptionHTML" = '${html}', "descriptionMarkdown" = '${markdown}', image = '${image}' 
+        WHERE id = ${id} `);
+        return results;
+      } catch (error) {
+        throw error;
+      }
+    }
   }
   Specialty.init(
     {

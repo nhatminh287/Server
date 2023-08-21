@@ -14,7 +14,7 @@ let sendSimpleEmail = async (dataSend) => {
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: '"mr.Tue Tran Cao 👻" <tuemeoptit@gmail.com>', // sender address
+    from: '"mr.Minh 👻" <nhatminhpro@gmail.com>', // sender address
     to: dataSend.receiveEmail, // list of receivers
     subject: "Thông Tin Đặt Lịch Khám Bệnh ✔", // Subject line
     html: getBodyHTMLEmail(dataSend),
@@ -26,10 +26,10 @@ let getBodyHTMLEmail = (dataSend) => {
   if (dataSend.language === "en") {
     result = `
             <h3>Dear ${dataSend.patientName} !</h3>
-            <p>You received this email because you booked an online medical appointment on the mr TueTranCao</p>
+            <p>You received this email because you booked an online barbershop appointment on the mr Minh</p>
             <p>Information to schedule an appointment :</p>
              <div><b>Time :${dataSend.time}</b></div>
-             <div><b>Doctor :${dataSend.doctorName}</b></div>
+             <div><b>Barber :${dataSend.doctorName}</b></div>
              <p> If the above information is exactly , Please click on the link below to confirm 
                 and completed the procedure to book an appointment!
              </p>
@@ -43,7 +43,7 @@ let getBodyHTMLEmail = (dataSend) => {
             <p>Bạn nhận được email này vì đã đặt lịch khám bệnh online qua mrTueTranCao</p>
             <p>Thông tin lịch khám bệnh của bạn đã đặt như sau :</p>
              <div><b>Thời Gian :${dataSend.time}</b></div>
-             <div><b>Bác Sĩ :${dataSend.doctorName}</b></div>
+             <div><b>Barber :${dataSend.doctorName}</b></div>
              <p>Nếu Các Thông Tin Trên Đây Là Đúng sự Thật , Vui Lòng Click vào Đường Link Bên Dưới
               Để Xác Nhận Và Hoàn Tất Thủ Tục Đặt Lịch Khám Bệnh!
              </p>
@@ -67,7 +67,7 @@ let sendAttachment = async (dataSend) => {
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: '"mr.Tue Tran Cao 👻" <tuemeoptit@gmail.com>', // sender address
+    from: '"mr.Minh 👻" <nhatminhpro@gmail.com>', // sender address
     to: dataSend.email, // list of receivers
     subject: "Kết Quả Đặt Lịch Khám Bệnh ✔", // Subject line
     html: getBodyHTMLEmailRemedy(dataSend),
@@ -85,7 +85,7 @@ let getBodyHTMLEmailRemedy = (dataSend) => {
   if (dataSend.language === "en") {
     result = `
             <h3>Dear ${dataSend.patientName}!</h3>
-            <p>You received this email because you booked an online medical appointment on the mr TueTranCao</p>
+            <p>You received this email because you booked an online medical appointment on the mr Minh</p>
              <div>Thank You!</div>
         `;
   }

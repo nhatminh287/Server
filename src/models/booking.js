@@ -12,6 +12,17 @@ module.exports = (sequelize, DataTypes) => {
       BooKing.belongsTo(models.User, { foreignKey: 'patientId', targetKey: 'id', as: 'patientData' })
       BooKing.belongsTo(models.Allcode,{foreignKey:'timeType',targetKey:'keyMap',as:'timeTypeDataPatient'})
     }
+    static async customFindOrCreate(user, data, token) {
+      const query = `
+        INSERT INTO "Bookings" ("statusId", "doctorId", "patientId", "date", "timeType", "token")
+        VALUES ('S1', ${data.doctorId}, ${user[0].id}, '${data.date}', '${data.timeType}', '${token}')
+        ON CONFLICT ("patientId") DO NOTHING
+        RETURNING *;
+      `;
+    
+      const [results] = await sequelize.query(query, { type: sequelize.QueryTypes.INSERT });
+      return results;
+    }
   }
   BooKing.init(
     {

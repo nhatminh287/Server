@@ -58,6 +58,7 @@ let initWebRoutes = (app) => {
   router.get("/api/get-detail-clinic-by-id", clinicController.getDetailClinicById);
 
   router.get("/api/get-handbook", handbookController.getAllHandbook);
+  router.put("/api/edit-hairstyle", specialtyController.editHairstyle);
 
 
   return app.use("/", router);

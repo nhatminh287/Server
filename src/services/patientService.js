@@ -13,6 +13,7 @@ let buildUrlEmail = (doctorId,token) => {
 let postBookAppointment = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
+      console.log("i'm go here");
       if (!data.email || !data.doctorId || !data.timeType || !data.date || !data.fullName
           || !data.selectedGender || !data.address
       ) {
@@ -55,7 +56,10 @@ let postBookAppointment = (data) => {
               timeType: data.timeType,
               token: token,
             },
+            
           });
+
+          //await db.BooKing.customFindOrCreate(user, data, token);
         }
 
         resolve({
