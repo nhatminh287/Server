@@ -217,9 +217,17 @@ let getDetailDoctorById = (inputId) => {
           raw: false,
           nest: true,
         });
+        
         if (data && data.image) {
-          data.image = new Buffer(data.image, "base64").toString("binary");
+          if (data.image.startsWith("http://") || data.image.startsWith("https://")) {
+            // Nếu data.image là đường dẫn HTTP, không cần xử lý mã hóa
+          } else {
+            // Nếu data.image là chuỗi base64, thực hiện việc giải mã
+            const imageBuffer = Buffer.from(data.image, "base64");
+            data.image = imageBuffer.toString("binary");
+          }
         }
+        
         if (!data) {
           data = {};
         }
@@ -250,14 +258,10 @@ let bulkCreateSchedule = (data) => {
             return item;
           });
         }
-
+        console.log("data bulk schedule: ", data);
         //get all existing data
-        let existing = await db.Schedule.findAll({
-          where: { doctorId: data.doctorId, date: data.formattedDate },
-          attributes: ["timeType", "date", "doctorId", "maxNumber"],
-          raw: true,
-        });
-
+        let existing = await db.Schedule.customFindAll(data.doctorId,data.formattedDate);
+        console.log('existing data: ', existing);
         // //convert date to timestamp
         // if (existing && existing.length > 0) {
         //   existing = existing.map((item) => {
@@ -270,11 +274,12 @@ let bulkCreateSchedule = (data) => {
         let toCreate = _.differenceWith(schedule, existing, (a, b) => {
           return a.timeType === b.timeType && +a.date === +b.date;
         });
-
+        console.log("bulk create: ", toCreate);
         //create data
         if (toCreate && toCreate.length > 0) {
           await db.Schedule.bulkCreate(toCreate);
         }
+        //await db.Schedule.bulkCreate(data.arrSchedule);
         resolve({
           errCode: 0,
           errMessage: "OK",
@@ -422,8 +427,15 @@ let getProfileDoctorById = (inputId) => {
           raw: false,
           nest: true,
         });
+        
         if (data && data.image) {
-          data.image = new Buffer(data.image, "base64").toString("binary");
+          if (data.image.startsWith("http://") || data.image.startsWith("https://")) {
+            // Nếu data.image là đường dẫn HTTP, không cần xử lý mã hóa
+          } else {
+            // Nếu data.image là chuỗi base64, thực hiện việc giải mã
+            const imageBuffer = Buffer.from(data.image, "base64");
+            data.image = imageBuffer.toString("binary");
+          }
         }
         if (!data) {
           data = {};
