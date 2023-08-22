@@ -260,7 +260,7 @@ let bulkCreateSchedule = (data) => {
         }
         console.log("data bulk schedule: ", data);
         //get all existing data
-        let existing = await db.Schedule.customFindAll(data.doctorId,data.formattedDate);
+        let existing = await db.Schedule.findAll(data.doctorId,data.formattedDate);
         console.log('existing data: ', existing);
         // //convert date to timestamp
         // if (existing && existing.length > 0) {
