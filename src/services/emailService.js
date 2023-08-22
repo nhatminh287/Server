@@ -16,7 +16,7 @@ let sendSimpleEmail = async (dataSend) => {
   let info = await transporter.sendMail({
     from: '"mr.Minh 👻" <nhatminhpro@gmail.com>', // sender address
     to: dataSend.receiveEmail, // list of receivers
-    subject: "Thông Tin Đặt Lịch Khám Bệnh ✔", // Subject line
+    subject: "Thông Tin Đặt Lịch Hẹn Barber ✔", // Subject line
     html: getBodyHTMLEmail(dataSend),
   });
 };
@@ -40,12 +40,12 @@ let getBodyHTMLEmail = (dataSend) => {
   if (dataSend.language === "vi") {
     result = `
             <h3>Xin Chào ${dataSend.patientName} !</h3>
-            <p>Bạn nhận được email này vì đã đặt lịch khám bệnh online qua mrTueTranCao</p>
-            <p>Thông tin lịch khám bệnh của bạn đã đặt như sau :</p>
+            <p>Bạn nhận được email này vì đã đặt lịch hẹn với barber online qua mr Minh</p>
+            <p>Thông tin lịch hẹn barber của bạn đã đặt như sau :</p>
              <div><b>Thời Gian :${dataSend.time}</b></div>
              <div><b>Barber :${dataSend.doctorName}</b></div>
              <p>Nếu Các Thông Tin Trên Đây Là Đúng sự Thật , Vui Lòng Click vào Đường Link Bên Dưới
-              Để Xác Nhận Và Hoàn Tất Thủ Tục Đặt Lịch Khám Bệnh!
+              Để Xác Nhận Và Hoàn Tất Thủ Tục Đặt Lịch Hẹn Với Barber!
              </p>
              <div><a href=${dataSend.redirectLink} target="_blank">->Click Here<-</a></div>
              <div>Xin Cảm Ơn !</div>
@@ -69,7 +69,7 @@ let sendAttachment = async (dataSend) => {
   let info = await transporter.sendMail({
     from: '"mr.Minh 👻" <nhatminhpro@gmail.com>', // sender address
     to: dataSend.email, // list of receivers
-    subject: "Kết Quả Đặt Lịch Khám Bệnh ✔", // Subject line
+    subject: "Kết Quả Đặt Lịch Hẹn Barber ✔", // Subject line
     html: getBodyHTMLEmailRemedy(dataSend),
     attachments: [
       {
@@ -92,7 +92,7 @@ let getBodyHTMLEmailRemedy = (dataSend) => {
   if (dataSend.language === "vi") {
     result = `
             <h3>Xin Chào ${dataSend.patientName} !</h3>
-            <p>Bạn nhận được email này vì đã đặt lịch khám bệnh Thành Công</p>
+            <p>Bạn nhận được email này vì đã đặt lịch hẹn Barber Thành Công</p>
             <p>Thông tin hóa đơn / đơn thuốc đã được gửi trong file đính kèm</p>
              <div> Xin Cảm Ơn !</div>
         `;

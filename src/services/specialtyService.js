@@ -89,13 +89,17 @@ let getDetailSpecialtyById = (inputId, location) => {
           where: { id: inputId },
           attributes: ["descriptionHTML", "descriptionMarkdown"],
         });
+        console.log("data specialty.findone: ", data);
         if (data) {
           let doctorSpecialty=[];
+          console.log("location: ", location);
           if (location === 'ALL') {
+
              doctorSpecialty = await db.Doctor_Infor.findAll({
                where: { specialtyId: inputId },
                attributes: ["doctorId", "provinceId"],
              });
+             console.log("doctorSpecialty: ", doctorSpecialty);
           } else {
              doctorSpecialty = await db.Doctor_Infor.findAll({
                where: {
