@@ -300,7 +300,7 @@ let getScheduleByDate = (doctorId, date) => {
         });
       } else {
         let data = await db.Schedule.findAll({
-          where: { doctorId: doctorId, date: date },
+          where: { doctorId: doctorId, date: date.toString() },
           include: [
             {
               model: db.Allcode,
