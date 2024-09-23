@@ -1,10 +1,10 @@
-import doctorService from "../services/doctorService";
+import barberService from "../services/barberService";
 
-let getTopDoctorHome = async (req, res) => {
+let getTopBarberHome = async (req, res) => {
   let limit = req.query.limit;
   if (!limit) limit = 10;
   try {
-    let response = await doctorService.getTopDoctorHome(+limit); // use +limit because maybe limit is string and must convert limit to number
+    let response = await barberService.getTopBarberHome(+limit); // use +limit because maybe limit is string and must convert limit to number
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
@@ -15,10 +15,10 @@ let getTopDoctorHome = async (req, res) => {
   }
 };
 
-let getAllDoctors = async (req, res) => {
+let getAllBarbers = async (req, res) => {
   try {
-    let doctors = await doctorService.getAllDoctors();
-    return res.status(200).json(doctors);
+    let barbers = await barberService.getAllBarbers();
+    return res.status(200).json(barbers);
   } catch (e) {
     return res.status(200).json({
       errCode: -1,
@@ -27,9 +27,9 @@ let getAllDoctors = async (req, res) => {
   }
 };
 
-let postInforDoctor = async (req, res) => {
+let postInforBarber = async (req, res) => {
   try {
-    let response = await doctorService.saveDetailInforDoctor(req.body);
+    let response = await barberService.saveDetailInforBarber(req.body);
     return res.status(200).json(response);
   } catch (e) {
     return res.status(200).json({
@@ -39,9 +39,9 @@ let postInforDoctor = async (req, res) => {
   }
 };
 
-let getDetailDoctorById = async (req, res) => {
+let getDetailBarberById = async (req, res) => {
   try {
-    let infor = await doctorService.getDetailDoctorById(req.query.id);
+    let infor = await barberService.getDetailBarberById(req.query.id);
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);
@@ -53,7 +53,7 @@ let getDetailDoctorById = async (req, res) => {
 };
 let bulkCreateSchedule = async (req, res) => {
   try {
-    let infor = await doctorService.bulkCreateSchedule(req.body);
+    let infor = await barberService.bulkCreateSchedule(req.body);
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);
@@ -66,8 +66,8 @@ let bulkCreateSchedule = async (req, res) => {
 
 let getScheduleByDate = async (req, res) => {
   try {
-    let infor = await doctorService.getScheduleByDate(
-      req.query.doctorId,
+    let infor = await barberService.getScheduleByDate(
+      req.query.barberId,
       req.query.date
     );
     return res.status(200).json(infor);
@@ -80,9 +80,9 @@ let getScheduleByDate = async (req, res) => {
   }
 };
 
-let getExtraInforDoctorById = async (req, res) => {
+let getExtraInforBarberById = async (req, res) => {
   try {
-    let infor = await doctorService.getExtraInforDoctorById(req.query.doctorId);
+    let infor = await barberService.getExtraInforBarberById(req.query.barberId);
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);
@@ -92,9 +92,9 @@ let getExtraInforDoctorById = async (req, res) => {
     });
   }
 };
-let getProfileDoctorById = async (req, res) => {
+let getProfileBarberById = async (req, res) => {
   try {
-    let infor = await doctorService.getProfileDoctorById(req.query.doctorId);
+    let infor = await barberService.getProfileBarberById(req.query.barberId);
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);
@@ -104,10 +104,10 @@ let getProfileDoctorById = async (req, res) => {
     });
   }
 };
-let getListPatientForDoctor = async (req, res) => {
+let getListCustomerForBarber = async (req, res) => {
   try {
-    let infor = await doctorService.getListPatientForDoctor(
-      req.query.doctorId,
+    let infor = await barberService.getListCustomerForBarber(
+      req.query.barberId,
       req.query.date
     );
     return res.status(200).json(infor);
@@ -121,7 +121,7 @@ let getListPatientForDoctor = async (req, res) => {
 };
 let sendRemedy = async (req, res) => {
   try {
-    let infor = await doctorService.sendRemedy(req.body);
+    let infor = await barberService.sendRemedy(req.body);
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);
@@ -133,14 +133,14 @@ let sendRemedy = async (req, res) => {
 };
 
 module.exports = {
-  getTopDoctorHome: getTopDoctorHome,
-  getAllDoctors: getAllDoctors,
-  postInforDoctor: postInforDoctor,
-  getDetailDoctorById: getDetailDoctorById,
+  getTopBarberHome: getTopBarberHome,
+  getAllBarbers: getAllBarbers,
+  postInforBarber: postInforBarber,
+  getDetailBarberById: getDetailBarberById,
   bulkCreateSchedule: bulkCreateSchedule,
   getScheduleByDate: getScheduleByDate,
-  getExtraInforDoctorById: getExtraInforDoctorById,
-  getProfileDoctorById: getProfileDoctorById,
-  getListPatientForDoctor: getListPatientForDoctor,
+  getExtraInforBarberById: getExtraInforBarberById,
+  getProfileBarberById: getProfileBarberById,
+  getListCustomerForBarber: getListCustomerForBarber,
   sendRemedy: sendRemedy,
 };

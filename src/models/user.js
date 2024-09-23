@@ -12,11 +12,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
        User.belongsTo(models.Allcode,{foreignKey:'positionId',targetKey:'keyMap',as:'positionData'})
        User.belongsTo(models.Allcode,{foreignKey:'gender',targetKey:'keyMap',as:'genderData'})
-       User.hasOne(models.Markdown,{foreignKey: 'doctorId'})
-       User.hasOne(models.Doctor_Infor, { foreignKey: 'doctorId' })
+       User.hasOne(models.Markdown,{foreignKey: 'barberId'})
+       User.hasOne(models.Barber_Infor, { foreignKey: 'barberId' })
       
-      User.hasMany(models.Schedule,{foreignKey:'doctorId',as:'doctorData'})
-      User.hasMany(models.BooKing,{foreignKey:'patientId',as:'patientData'})
+      User.hasMany(models.Schedule,{foreignKey:'barberId',as:'barberData'})
+      User.hasMany(models.BooKing,{foreignKey:'customerId',as:'customerData'})
     }
   };
   User.init(

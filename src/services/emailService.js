@@ -28,11 +28,11 @@ let getBodyHTMLEmail = (dataSend) => {
   let result = "";
   if (dataSend.language === "en") {
     result = `
-            <h3>Dear ${dataSend.patientName} !</h3>
+            <h3>Dear ${dataSend.customerName} !</h3>
             <p>You received this email because you booked an online barbershop appointment on the mr Minh</p>
             <p>Information to schedule an appointment :</p>
              <div><b>Time :${dataSend.time}</b></div>
-             <div><b>Barber :${dataSend.doctorName}</b></div>
+             <div><b>Barber :${dataSend.barberName}</b></div>
              <p> If the above information is exactly , Please click on the link below to confirm 
                 and completed the procedure to book an appointment!
              </p>
@@ -42,11 +42,11 @@ let getBodyHTMLEmail = (dataSend) => {
   }
   if (dataSend.language === "vi") {
     result = `
-            <h3>Xin Chào ${dataSend.patientName} !</h3>
+            <h3>Xin Chào ${dataSend.customerName} !</h3>
             <p>Bạn nhận được email này vì đã đặt lịch hẹn với barber online qua mr Minh</p>
             <p>Thông tin lịch hẹn barber của bạn đã đặt như sau :</p>
              <div><b>Thời Gian :${dataSend.time}</b></div>
-             <div><b>Barber :${dataSend.doctorName}</b></div>
+             <div><b>Barber :${dataSend.barberName}</b></div>
              <p>Nếu Các Thông Tin Trên Đây Là Đúng sự Thật , Vui Lòng Click vào Đường Link Bên Dưới
               Để Xác Nhận Và Hoàn Tất Thủ Tục Đặt Lịch Hẹn Với Barber!
              </p>
@@ -76,7 +76,7 @@ let sendAttachment = async (dataSend) => {
     html: getBodyHTMLEmailRemedy(dataSend),
     attachments: [
       {
-        filename: `remedy-${dataSend.patientId}-${new Date().getTime()}.png`,
+        filename: `remedy-${dataSend.customerId}-${new Date().getTime()}.png`,
         content: dataSend.imgBase64.split("base64,")[1],
         encoding: "base64",
       },
@@ -87,14 +87,14 @@ let getBodyHTMLEmailRemedy = (dataSend) => {
   let result = "";
   if (dataSend.language === "en") {
     result = `
-            <h3>Dear ${dataSend.patientName}!</h3>
+            <h3>Dear ${dataSend.customerName}!</h3>
             <p>You received this email because you booked an online medical appointment on the mr Minh</p>
              <div>Thank You!</div>
         `;
   }
   if (dataSend.language === "vi") {
     result = `
-            <h3>Xin Chào ${dataSend.patientName} !</h3>
+            <h3>Xin Chào ${dataSend.customerName} !</h3>
             <p>Bạn nhận được email này vì đã đặt lịch hẹn Barber Thành Công</p>
             <p>Thông tin hóa đơn / đơn thuốc đã được gửi trong file đính kèm</p>
              <div> Xin Cảm Ơn !</div>

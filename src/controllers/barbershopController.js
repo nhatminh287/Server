@@ -1,8 +1,8 @@
-import clinicService from '../services/clinicService';
+import barbershopService from '../services/barbershopService';
 
-let createClinic = async (req, res) => {
+let createBarbershop = async (req, res) => {
   try {
-    let infor = await clinicService.createClinic(req.body);
+    let infor = await barbershopService.createBarbershop(req.body);
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);
@@ -12,9 +12,9 @@ let createClinic = async (req, res) => {
     });
   }
 };
-let getAllClinic = async (req, res) => {
+let getAllBarbershop = async (req, res) => {
   try {
-    let infor = await clinicService.getAllClinic();
+    let infor = await barbershopService.getAllBarbershop();
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);
@@ -24,9 +24,9 @@ let getAllClinic = async (req, res) => {
     });
   }
 };
-let getDetailClinicById = async (req, res) => {
+let getDetailBarbershopById = async (req, res) => {
   try {
-    let infor = await clinicService.getDetailClinicById(req.query.id);
+    let infor = await barbershopService.getDetailBarbershopById(req.query.id);
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);
@@ -38,7 +38,7 @@ let getDetailClinicById = async (req, res) => {
 };
 
 module.exports = {
-  createClinic: createClinic,
-  getAllClinic: getAllClinic,
-  getDetailClinicById: getDetailClinicById,
+  createBarbershop: createBarbershop,
+  getAllBarbershop: getAllBarbershop,
+  getDetailBarbershopById: getDetailBarbershopById,
 };

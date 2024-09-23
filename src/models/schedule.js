@@ -10,11 +10,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Schedule.belongsTo(models.Allcode, { foreignKey: 'timeType', targetKey: 'keyMap', as: 'timeTypeData' })
-      Schedule.belongsTo(models.User,{foreignKey:'doctorId',targetKey: 'id',as:'doctorData'})
+      Schedule.belongsTo(models.User,{foreignKey:'barberId',targetKey: 'id',as:'barberData'})
     }
     static async customFindAll(id, date) {
       try {
-        const [results] = await sequelize.query(`SELECT "timeType", "date", "doctorId", "maxNumber" FROM "Schedules" AS "Schedule" WHERE "Schedule"."doctorId" = ${id} AND "Schedule"."date" = '${date}'`);
+        const [results] = await sequelize.query(`SELECT "timeType", "date", "barberId", "maxNumber" FROM "Schedules" AS "Schedule" WHERE "Schedule"."barberId" = ${id} AND "Schedule"."date" = '${date}'`);
         return results;
       } catch (error) {
         throw error;
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       maxNumber: DataTypes.INTEGER,
       date: DataTypes.STRING,
       timeType: DataTypes.STRING,
-      doctorId: DataTypes.INTEGER,
+      barberId: DataTypes.INTEGER,
     },
     {
       sequelize,

@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Specialty extends Model {
+  class Hairstyle extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -10,9 +10,9 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-    static async editSpecialty(id, name, html, markdown, image){
+    static async editHairstyle(id, name, html, markdown, image){
       try {
-        const [results] = await sequelize.query(`UPDATE "Specialties" 
+        const [results] = await sequelize.query(`UPDATE "Hairstyle" 
         SET name = '${name}', "descriptionHTML" = '${html}', "descriptionMarkdown" = '${markdown}', image = '${image}' 
         WHERE id = ${id} `);
         return results;
@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   }
-  Specialty.init(
+  Hairstyle.init(
     {
       name: DataTypes.STRING,
       descriptionHTML: DataTypes.TEXT,
@@ -30,8 +30,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Specialty",
+      modelName: "Hairstyle",
     }
   );
-  return Specialty;
+  return Hairstyle;
 };

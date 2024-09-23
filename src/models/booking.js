@@ -9,14 +9,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      BooKing.belongsTo(models.User, { foreignKey: 'patientId', targetKey: 'id', as: 'patientData' })
-      BooKing.belongsTo(models.Allcode,{foreignKey:'timeType',targetKey:'keyMap',as:'timeTypeDataPatient'})
+      BooKing.belongsTo(models.User, { foreignKey: 'customerId', targetKey: 'id', as: 'customerData' })
+      BooKing.belongsTo(models.Allcode,{foreignKey:'timeType',targetKey:'keyMap',as:'timeTypeDataCustomer'})
     }
     static async customFindOrCreate(user, data, token) {
       const query = `
-        INSERT INTO "Bookings" ("statusId", "doctorId", "patientId", "date", "timeType", "token")
-        VALUES ('S1', ${data.doctorId}, ${user[0].id}, '${data.date}', '${data.timeType}', '${token}')
-        ON CONFLICT ("patientId") DO NOTHING
+        INSERT INTO "Bookings" ("statusId", "barberId", "customerId", "date", "timeType", "token")
+        VALUES ('S1', ${data.barberId}, ${user[0].id}, '${data.date}', '${data.timeType}', '${token}')
+        ON CONFLICT ("customerId") DO NOTHING
         RETURNING *;
       `;
     
@@ -27,8 +27,8 @@ module.exports = (sequelize, DataTypes) => {
   BooKing.init(
     {
       statusId: DataTypes.STRING,
-      doctorId: DataTypes.INTEGER,
-      patientId: DataTypes.INTEGER,
+      barberId: DataTypes.INTEGER,
+      customerId: DataTypes.INTEGER,
       date: DataTypes.STRING,
       timeType: DataTypes.STRING,
       token: DataTypes.STRING,

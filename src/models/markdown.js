@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class Markdown extends Model {
     static associate(models) {
       // define association here
-      Markdown.belongsTo(models.User,{foreignKey:'doctorId'})
+      Markdown.belongsTo(models.User,{foreignKey:'barberId'})
     }
   }
   Markdown.init(
@@ -12,9 +12,9 @@ module.exports = (sequelize, DataTypes) => {
       contentHTML: DataTypes.TEXT('long'),
       contentMarkdown: DataTypes.TEXT('long'),
       description: DataTypes.TEXT('long'),
-      doctorId: DataTypes.INTEGER,
-      specialtyId: DataTypes.INTEGER,
-      clinicId: DataTypes.INTEGER,
+      barberId: DataTypes.INTEGER,
+      hairstyleId: DataTypes.INTEGER,
+      barbershopId: DataTypes.INTEGER,
     },
     {
       sequelize,

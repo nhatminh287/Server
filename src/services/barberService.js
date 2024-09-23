@@ -1,10 +1,10 @@
 import db from "../models/index";
 require("dotenv").config();
 import _ from "lodash";
-import emailService from "../services/emailService";
+import emailService from "./emailService";
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
 
-let getTopDoctorHome = (limitInput) => {
+let getTopBarberHome = (limitInput) => {
   return new Promise(async (resolve, reject) => {
     try {
       let users = await db.User.findAll({
@@ -39,10 +39,10 @@ let getTopDoctorHome = (limitInput) => {
   });
 };
 
-let getAllDoctors = () => {
+let getAllBarbers = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      let doctors = await db.User.findAll({
+      let barbers = await db.User.findAll({
         where: { roleId: "R2" },
         attributes: {
           exclude: ["password", "image"],
@@ -50,7 +50,7 @@ let getAllDoctors = () => {
       });
       resolve({
         errCode: 0,
-        data: doctors,
+        data: barbers,
       });
     } catch (e) {
       reject(e);
@@ -61,16 +61,16 @@ let getAllDoctors = () => {
 //function check parameter
 let checkRequiredFields = (inputData) => {
   let arrFields = [
-    "doctorId",
+    "barberId",
     "contentHTML",
     "contentMarkdown",
     "action",
     "selectedPrice",
     "selectedProvince",
     "selectedPayment",
-    "nameClinic",
-    "addressClinic",
-    "specialtyId",
+    "nameBarbershop",
+    "addressBarbershop",
+    "hairstyleId",
   ];
   let elementErr = "";
   let isValid = true;
@@ -87,7 +87,7 @@ let checkRequiredFields = (inputData) => {
   };
 };
 
-let saveDetailInforDoctor = (inputData) => {
+let saveDetailInforBarber = (inputData) => {
   return new Promise(async (resolve, reject) => {
     try {
       let checkObj = checkRequiredFields(inputData);
@@ -103,59 +103,59 @@ let saveDetailInforDoctor = (inputData) => {
             contentHTML: inputData.contentHTML,
             contentMarkdown: inputData.contentMarkdown,
             description: inputData.description,
-            doctorId: inputData.doctorId,
+            barberId: inputData.barberId,
           });
         }
         if (inputData.action === "EDIT") {
-          let doctorMarkdown = await db.Markdown.findOne({
-            where: { doctorId: inputData.doctorId },
+          let barberMarkdown = await db.Markdown.findOne({
+            where: { barberId: inputData.barberId },
             raw: false,
           });
-          if (doctorMarkdown) {
-            doctorMarkdown.contentHTML = inputData.contentHTML;
-            doctorMarkdown.contentMarkdown = inputData.contentMarkdown;
-            doctorMarkdown.description = inputData.description;
-            doctorMarkdown.updatedAt = new Date();
-            await doctorMarkdown.save();
+          if (barberMarkdown) {
+            barberMarkdown.contentHTML = inputData.contentHTML;
+            barberMarkdown.contentMarkdown = inputData.contentMarkdown;
+            barberMarkdown.description = inputData.description;
+            barberMarkdown.updatedAt = new Date();
+            await barberMarkdown.save();
           }
         }
-        //up sert to doctor_infor table
-        let doctorInfor = await db.Doctor_Infor.findOne({
+        //up sert to barber_infor table
+        let barberInfor = await db.Barber_Infor.findOne({
           where: {
-            doctorId: inputData.doctorId,
+            barberId: inputData.barberId,
           },
           raw: false,
         });
-        if (doctorInfor) {
+        if (barberInfor) {
           //update
-          (doctorInfor.doctorId = inputData.doctorId),
-            (doctorInfor.priceId = inputData.selectedPrice);
-          doctorInfor.provinceId = inputData.selectedProvince;
-          doctorInfor.paymentId = inputData.selectedPayment;
+          (barberInfor.barberId = inputData.barberId),
+            (barberInfor.priceId = inputData.selectedPrice);
+          barberInfor.provinceId = inputData.selectedProvince;
+          barberInfor.paymentId = inputData.selectedPayment;
 
-          doctorInfor.nameClinic = inputData.nameClinic;
-          doctorInfor.addressClinic = inputData.addressClinic;
-          doctorInfor.note = inputData.note;
-          doctorInfor.specialtyId = inputData.specialtyId;
-          doctorInfor.clinicId = inputData.clinicId;
-          await doctorInfor.save();
+          barberInfor.nameBarbershop = inputData.nameBarbershop;
+          barberInfor.addressBarbershop = inputData.addressBarbershop;
+          barberInfor.note = inputData.note;
+          barberInfor.hairstyleId = inputData.hairstyleId;
+          barberInfor.barbershopId = inputData.barbershopId;
+          await barberInfor.save();
           resolve({
             errCode: 0,
             errMessage: "update success",
           });
         } else {
           // create
-          await db.Doctor_Infor.create({
-            doctorId: inputData.doctorId,
+          await db.Barber_Infor.create({
+            barberId: inputData.barberId,
             priceId: inputData.selectedPrice,
             provinceId: inputData.selectedProvince,
             paymentId: inputData.selectedPayment,
 
-            nameClinic: inputData.nameClinic,
-            addressClinic: inputData.addressClinic,
+            nameBarbershop: inputData.nameBarbershop,
+            addressBarbershop: inputData.addressBarbershop,
             note: inputData.note,
-            specialtyId: inputData.specialtyId,
-            clinicId: inputData.clinicId,
+            hairstyleId: inputData.hairstyleId,
+            barbershopId: inputData.barbershopId,
           });
           resolve({
             errCode: 0,
@@ -169,7 +169,7 @@ let saveDetailInforDoctor = (inputData) => {
   });
 };
 
-let getDetailDoctorById = (inputId) => {
+let getDetailBarberById = (inputId) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!inputId) {
@@ -194,7 +194,7 @@ let getDetailDoctorById = (inputId) => {
               attributes: ["valueEn", "valueVi"],
             },
             {
-              model: db.Doctor_Infor,
+              model: db.Barber_Infor,
               include: [
                 {
                   model: db.Allcode,
@@ -245,7 +245,7 @@ let getDetailDoctorById = (inputId) => {
 let bulkCreateSchedule = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!data.arrSchedule || !data.doctorId || !data.formattedDate) {
+      if (!data.arrSchedule || !data.barberId || !data.formattedDate) {
         resolve({
           errCode: 1,
           errMessage: "Missing require parameter",
@@ -260,12 +260,12 @@ let bulkCreateSchedule = (data) => {
         }
         console.log("data bulk schedule: ", data);
         //get all existing data
-        /* let existing = await db.Schedule.findAll(data.doctorId,data.formattedDate);
+        /* let existing = await db.Schedule.findAll(data.barberId,data.formattedDate);
         console.log('existing data: ', existing); */
 
         let existing = await db.Schedule.findAll({
-          where: { doctorId: data.doctorId, date: data.formattedDate },
-          attributes: ["timeType", "date", "doctorId", "maxNumber"],
+          where: { barberId: data.barberId, date: data.formattedDate },
+          attributes: ["timeType", "date", "barberId", "maxNumber"],
           raw: true,
         });
         
@@ -290,17 +290,17 @@ let bulkCreateSchedule = (data) => {
   });
 };
 
-let getScheduleByDate = (doctorId, date) => {
+let getScheduleByDate = (barberId, date) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!doctorId || !date) {
+      if (!barberId || !date) {
         resolve({
           errCode: 1,
           errMessage: "Missing parameter",
         });
       } else {
         let data = await db.Schedule.findAll({
-          where: { doctorId: doctorId, date: date.toString() },
+          where: { barberId: barberId, date: date.toString() },
           include: [
             {
               model: db.Allcode,
@@ -309,7 +309,7 @@ let getScheduleByDate = (doctorId, date) => {
             },
             {
               model: db.User,
-              as: "doctorData",
+              as: "barberData",
               attributes: ["firstName", "lastName"],
             },
           ],
@@ -330,7 +330,7 @@ let getScheduleByDate = (doctorId, date) => {
   });
 };
 
-let getExtraInforDoctorById = (idInput) => {
+let getExtraInforBarberById = (idInput) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!idInput) {
@@ -339,10 +339,10 @@ let getExtraInforDoctorById = (idInput) => {
           errMessage: "missing required params",
         });
       } else {
-        let data = await db.Doctor_Infor.findOne({
-          where: { doctorId: idInput },
+        let data = await db.Barber_Infor.findOne({
+          where: { barberId: idInput },
           attributes: {
-            exclude: ["id", "doctorId"],
+            exclude: ["id", "barberId"],
           },
           include: [
             {
@@ -378,7 +378,7 @@ let getExtraInforDoctorById = (idInput) => {
   });
 };
 
-let getProfileDoctorById = (inputId) => {
+let getProfileBarberById = (inputId) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!inputId) {
@@ -403,7 +403,7 @@ let getProfileDoctorById = (inputId) => {
               attributes: ["valueEn", "valueVi"],
             },
             {
-              model: db.Doctor_Infor,
+              model: db.Barber_Infor,
               include: [
                 {
                   model: db.Allcode,
@@ -450,10 +450,10 @@ let getProfileDoctorById = (inputId) => {
   });
 };
 
-let getListPatientForDoctor = (doctorId, date) => {
+let getListCustomerForBarber = (barberId, date) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!doctorId || !date) {
+      if (!barberId || !date) {
         resolve({
           errCode: 1,
           errMessage: "Missing parameter",
@@ -462,13 +462,13 @@ let getListPatientForDoctor = (doctorId, date) => {
         let data = await db.BooKing.findAll({
           where: {
             statusId: "S2",
-            doctorId: doctorId,
+            barberId: barberId,
             date: date,
           },
           include: [
             {
               model: db.User,
-              as: "patientData",
+              as: "customerData",
               attributes: ["email", "firstName", "address", "gender"],
               include: [
                 {
@@ -480,7 +480,7 @@ let getListPatientForDoctor = (doctorId, date) => {
             },
             {
               model: db.Allcode,
-              as: "timeTypeDataPatient",
+              as: "timeTypeDataCustomer",
               attributes: ["valueEn", "valueVi"],
             },
           ],
@@ -502,17 +502,17 @@ let getListPatientForDoctor = (doctorId, date) => {
 let sendRemedy = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!data.email || !data.doctorId || !data.patientId || !data.timeType) {
+      if (!data.email || !data.barberId || !data.customerId || !data.timeType) {
         resolve({
           errCode: 1,
           errMessage: "missing required parameter",
         });
       } else {
-        // update patient status
+        // update customer status
         let appointment = await db.BooKing.findOne({
           where: {
-            doctorId: data.doctorId,
-            patientId: data.patientId,
+            barberId: data.barberId,
+            customerId: data.customerId,
             timeType: data.timeType,
             statusId: "S2",
           },
@@ -522,7 +522,7 @@ let sendRemedy = (data) => {
           appointment.statusId = "S3";
           await appointment.save();
         }
-        // send mail for patient
+        // send mail for customer
           await emailService.sendAttachment(data);
 
         resolve({
@@ -537,14 +537,14 @@ let sendRemedy = (data) => {
 };
 
 module.exports = {
-  getTopDoctorHome: getTopDoctorHome,
-  getAllDoctors: getAllDoctors,
-  saveDetailInforDoctor: saveDetailInforDoctor,
-  getDetailDoctorById: getDetailDoctorById,
+  getTopBarberHome: getTopBarberHome,
+  getAllBarbers: getAllBarbers,
+  saveDetailInforBarber: saveDetailInforBarber,
+  getDetailBarberById: getDetailBarberById,
   bulkCreateSchedule: bulkCreateSchedule,
   getScheduleByDate: getScheduleByDate,
-  getExtraInforDoctorById: getExtraInforDoctorById,
-  getProfileDoctorById: getProfileDoctorById,
-  getListPatientForDoctor: getListPatientForDoctor,
+  getExtraInforBarberById: getExtraInforBarberById,
+  getProfileBarberById: getProfileBarberById,
+  getListCustomerForBarber: getListCustomerForBarber,
   sendRemedy: sendRemedy,
 };

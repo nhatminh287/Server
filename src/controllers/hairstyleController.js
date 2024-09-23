@@ -1,7 +1,7 @@
-import specialtyService from "../services/specialtyService";
-let createSpecialty = async (req, res) => {
+import hairstyleService from "../services/hairstyleService";
+let createHairstyle = async (req, res) => {
   try {
-    let infor = await specialtyService.createSpecialty(req.body);
+    let infor = await hairstyleService.createHairstyle(req.body);
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);
@@ -13,7 +13,7 @@ let createSpecialty = async (req, res) => {
 };
 let editHairstyle = async (req, res) => {
   try {
-    let infor = await specialtyService.editHairstyle(req.body);
+    let infor = await hairstyleService.editHairstyle(req.body);
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);
@@ -23,9 +23,9 @@ let editHairstyle = async (req, res) => {
     });
   }
 };
-let getAllSpecialty = async (req, res) => {
+let getAllHairstyle = async (req, res) => {
   try {
-    let infor = await specialtyService.getAllSpecialty();
+    let infor = await hairstyleService.getAllHairstyle();
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);
@@ -35,9 +35,9 @@ let getAllSpecialty = async (req, res) => {
     });
   }
 };
-let getDetailSpecialtyById = async (req, res) => {
+let getDetailHairstyleById = async (req, res) => {
   try {
-    let infor = await specialtyService.getDetailSpecialtyById(req.query.id,req.query.location);
+    let infor = await hairstyleService.getDetailHairstyleById(req.query.id,req.query.location);
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);
@@ -49,8 +49,8 @@ let getDetailSpecialtyById = async (req, res) => {
 };
 
 module.exports = {
-  createSpecialty: createSpecialty,
-  getAllSpecialty: getAllSpecialty,
-  getDetailSpecialtyById: getDetailSpecialtyById,
+  createHairstyle: createHairstyle,
+  getAllHairstyle: getAllHairstyle,
+  getDetailHairstyleById: getDetailHairstyleById,
   editHairstyle: editHairstyle,
 };

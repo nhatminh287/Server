@@ -5,16 +5,15 @@ import emailService from './emailService';
 import { v4 as uuidv4 } from 'uuid';
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
 
-let buildUrlEmail = (doctorId,token) => {
-  let result = `${process.env.URL_REACT}/verify-booking?token=${token}&doctorId=${doctorId}`;
+let buildUrlEmail = (barberId,token) => {
+  let result = `${process.env.URL_REACT}/verify-booking?token=${token}&barberId=${barberId}`;
   return result;
 };
 
 let postBookAppointment = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log("i'm go here");
-      if (!data.email || !data.doctorId || !data.timeType || !data.date || !data.fullName
+      if (!data.email || !data.barberId || !data.timeType || !data.date || !data.fullName
           || !data.selectedGender || !data.address
       ) {
         resolve({
@@ -25,14 +24,14 @@ let postBookAppointment = (data) => {
         let token =  uuidv4();
         await emailService.sendSimpleEmail({
           receiveEmail: data.email,
-          patientName: data.fullName,
+          customerName: data.fullName,
           time: data.timeString,
-          doctorName: data.doctorName,
+          barberName: data.barberName,
           language: data.language,
-          redirectLink: buildUrlEmail(data.doctorId, token),
+          redirectLink: buildUrlEmail(data.barberId, token),
         });
 
-        // upsert patient information<update/insert>
+        // upsert customer information<update/insert>
         let user = await db.User.findOrCreate({
           where: { email: data.email },
           defaults: {
@@ -47,11 +46,11 @@ let postBookAppointment = (data) => {
         // create booking record / add a new appointment for examination
         if (user && user[0]) {
           await db.BooKing.findOrCreate({
-            where: {patientId: user[0].id},
+            where: {customerId: user[0].id},
             defaults: {
               statusId: "S1",
-              doctorId: data.doctorId,
-              patientId: user[0].id,
+              barberId: data.barberId,
+              customerId: user[0].id,
               date: data.date,
               timeType: data.timeType,
               token: token,
@@ -64,7 +63,7 @@ let postBookAppointment = (data) => {
 
         resolve({
           errCode: 0,
-          errMessage: "save infor patient success",
+          errMessage: "save infor customer success",
         });
       }
     } catch (e) {
@@ -76,15 +75,15 @@ let postBookAppointment = (data) => {
 let postVerifyBookAppointment = (data) => {
   return new Promise(async(resolve, reject) => {
      try {
-       if (!data.token || !data.doctorId) {
+       if (!data.token || !data.barberId) {
             resolve({
               errCode: 1,
-              errMessage: "Missing token or doctorId",
+              errMessage: "Missing token or barberId",
             });
        } else {
          let appointment = await db.BooKing.findOne({
            where: {
-             doctorId: data.doctorId,
+             barberId: data.barberId,
              token: data.token,
              statusId: 'S1'
            },

@@ -1,6 +1,6 @@
 import db from "../models/index";
 
-let createClinic = async (data) => {
+let createBarbershop = async (data) => {
   return new Promise(async(resolve, reject) => {
     try {
       if (
@@ -15,7 +15,7 @@ let createClinic = async (data) => {
               errMessage:"Missing many fields"
         });
       } else {
-         await db.Clinic.create({
+         await db.Barbershop.create({
           name: data.name,
           image: data.imageBase64,
           descriptionHTML: data.descriptionHTML,
@@ -33,10 +33,10 @@ let createClinic = async (data) => {
   });
 };
 
-let getAllClinic = async () => {
+let getAllBarbershop = async () => {
   return new Promise(async(resolve, reject) => {
        try {
-         let data = await db.Clinic.findAll();
+         let data = await db.Barbershop.findAll();
          if (data && data.length > 0) {
            data.map((item) => {
              item.image = new Buffer(item.image, "base64").toString("binary");
@@ -45,7 +45,7 @@ let getAllClinic = async () => {
          }
          resolve({
            errCode: 0,
-           errMessage: "get clinic success",
+           errMessage: "get barbershop success",
            data: data,
          });
        } catch (e) {
@@ -53,7 +53,7 @@ let getAllClinic = async () => {
        }
      })
 }
-let getDetailClinicById = async (inputId) => {
+let getDetailBarbershopById = async (inputId) => {
   return new Promise(async (resolve, reject) => {
     try {
       //
@@ -64,17 +64,17 @@ let getDetailClinicById = async (inputId) => {
         });
       } else {
         let data = {};
-        data = await db.Clinic.findOne({
+        data = await db.Barbershop.findOne({
           where: { id: inputId },
           attributes: ["descriptionHTML", "descriptionMarkdown","name","address"],
         });
         if (data) {
-          let doctorClinic = []; 
-            doctorClinic = await db.Doctor_Infor.findAll({
-              where: { clinicId: inputId },
-              attributes: ["doctorId", "provinceId"],
+          let barberBarbershop = []; 
+            barberBarbershop = await db.Barber_Infor.findAll({
+              where: { barbershopId: inputId },
+              attributes: ["barberId", "provinceId"],
             });    
-          data.doctorClinic = doctorClinic;
+          data.barberBarbershop = barberBarbershop;
         } else {
           data = {};
         }
@@ -92,7 +92,7 @@ let getDetailClinicById = async (inputId) => {
 };
 
 module.exports = {
-  createClinic: createClinic,
-  getAllClinic: getAllClinic,
-  getDetailClinicById: getDetailClinicById,
+  createBarbershop: createBarbershop,
+  getAllBarbershop: getAllBarbershop,
+  getDetailBarbershopById: getDetailBarbershopById,
 };

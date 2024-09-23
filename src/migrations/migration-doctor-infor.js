@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      specialtyId: {
+      hairstyleId: {
         type: Sequelize.INTEGER,
       },
       clinicId: {

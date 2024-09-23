@@ -1,9 +1,9 @@
 import db from "../models/index";
-import patientService from "../services/patientService";
+import customerService from "../services/customerService";
 
 let postBookAppointment = async(req, res) => {
      try {
-       let infor = await patientService.postBookAppointment(req.body);
+       let infor = await customerService.postBookAppointment(req.body);
        return res.status(200).json(infor);
      } catch (e) {
        console.log(e);
@@ -15,7 +15,7 @@ let postBookAppointment = async(req, res) => {
 }
 let postVerifyBookAppointment = async (req, res) => {
   try {
-    let infor = await patientService.postVerifyBookAppointment(req.body);
+    let infor = await customerService.postVerifyBookAppointment(req.body);
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);
